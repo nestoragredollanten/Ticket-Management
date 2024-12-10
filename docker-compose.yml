@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Servicio para PostgreSQL
+  postgres:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      - POSTGRES_DB=ticket_database
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # Servicio para la aplicación Java
+  java-app:
+    build: .
+    container_name: java_app
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ticket_database
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+# Volumen para persistencia de datos de PostgreSQL
+volumes:
+  postgres_data:
+
+# Redes de contenedores
+networks:
+  backend:
+    driver: bridge
