@@ -1,8 +1,8 @@
 package com.nray.ticketmanagement.service.impl;
 
-import com.nray.ticketmanagement.entity.TicketEntity;
 import com.nray.ticketmanagement.dto.Status;
 import com.nray.ticketmanagement.dto.TicketDTO;
+import com.nray.ticketmanagement.entity.TicketEntity;
 import com.nray.ticketmanagement.repository.TicketRepository;
 import com.nray.ticketmanagement.service.TicketService;
 import org.modelmapper.ModelMapper;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -74,7 +73,7 @@ public class TicketServiceImpl implements TicketService {
     public Page<TicketDTO> mapPageToDTO(Page<TicketEntity> ticketEntities) {
         List<TicketDTO> ticketDTOs = ticketEntities.getContent().stream()
                 .map(ticket -> mapper.map(ticket, TicketDTO.class))
-                .collect(Collectors.toList());
+                .toList();
 
         return new PageImpl<>(ticketDTOs, ticketEntities.getPageable(), ticketEntities.getTotalElements());
     }
